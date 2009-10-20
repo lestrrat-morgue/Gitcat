@@ -67,8 +67,7 @@ sub _build_config {
     my $self = shift;
     local $/ = "\0";
 
-    my @cmd = $self->git_cmd('config', '-z', '-l');
-    open my $fh, "-|", @cmd or confess "Could not execut @cmd: $!";
+    my $fh  = $self->execfh('config', '-z', '-l');
 
     my %config;
     while (my $line = <$fh>) {
@@ -81,7 +80,14 @@ sub _build_config {
 }
 
 sub _build_git {
-    return "/opt/local/bin/git";
+    my @paths = split(/:/, $ENV{GITCAT_GIT_PATH} || "/opt/local/bin:/usr/local/bin:/usr/bin");
+    foreach my $path (@paths) {
+        my $x = Path::Class::File->new( $path, 'git' );
+        if( -x $x ) {
+            return $x;
+        }
+    }
+    confess "Could not find git executable";
 }
 
 sub _build_is_bare {
@@ -113,7 +119,7 @@ sub _build_gitdir {
 sub _build_last_change {
     my $self = shift;
 
-    my $fh = $self->git_cmd(
+    my $fh = $self->execfh(
         'for-each-ref',
         '--format=%(committer)',
         '--sort=-committerdate',
@@ -151,7 +157,7 @@ sub _build_owner {
 sub _build_refs {
     my ($self) = @_;
 
-    my $fh = $self->git_cmd("show-ref");
+    my $fh = $self->execfh("show-ref");
     my %refs;
     while (my $line = <$fh>) {
         chomp $line;
@@ -161,15 +167,6 @@ sub _build_refs {
     return \%refs;
 }
         
-sub git_cmd {
-    my ($self, @args) = @_;
-    my @cmd = ( $self->git, '--git-dir='. $self->gitdir(), @args );
-    open my $fh, "-|", @cmd or confess "Failed to execute @cmd: $!";
-    binmode($fh, ':utf8');
-    return $fh;
-}
-    
-
 sub commits {
     my ($self, $sha1) = @_;
 
@@ -179,7 +176,7 @@ sub commits {
     my $maxcount = 10;
     my @args;
 
-    my $fh = $self->git_cmd("rev-list", "--header", $sha1, @args, "--max-count=$maxcount");
+    my $fh = $self->execfh("rev-list", "--header", $sha1, @args, "--max-count=$maxcount");
 
     local $/ = "\0";
     while (my $line = <$fh>) {
@@ -190,7 +187,19 @@ sub commits {
     return \@commits;
 }
 
+sub cmd {
+    my ($self, @args) = @_;
+    return ( $self->git, '--git-dir='. $self->gitdir(), @args );
+}
 
+sub execfh {
+    my ($self, @args) = @_;
+    my @cmd = $self->cmd(@args);
+    open my $fh, "-|", @cmd or confess "Failed to execute @cmd: $!";
+    binmode($fh, ':utf8');
+    return $fh;
+}
+    
 __PACKAGE__->meta->make_immutable();
 
 1;
