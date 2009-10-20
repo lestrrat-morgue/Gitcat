@@ -3,6 +3,7 @@ use Moose;
 use MooseX::Types::Path::Class;
 use DateTime;
 use Gitcat::Commit;
+use Gitcat::Object;
 use namespace::clean -except => qw(meta);
 
 has config => (
@@ -198,6 +199,50 @@ sub execfh {
     open my $fh, "-|", @cmd or confess "Failed to execute @cmd: $!";
     binmode($fh, ':utf8');
     return $fh;
+}
+
+sub get_object_content {
+    my ($self, $type, $sha1) = @_;
+
+    my $fh = $self->execfh( "cat-file", $type, $sha1 );
+    return do { local $/; <$fh> };
+}
+
+sub get_object_from_path {
+    my ($self, $branch, @args) = @_;
+
+    my $parent_sha1 = $self->refs->{"refs/heads/$branch"}->{sha1};
+    my @comps = @args;
+
+    while (my $next = shift @comps) {
+        my $found = 0;
+        my $fh = $self->execfh('ls-tree', '-z', $parent_sha1);
+        local $/ = "\0";
+        while (my $line = <$fh>) {
+            chomp $line;
+
+            my ($mode, $kind, $sha1, $name) = split /\s+/, $line, 4;
+
+            if ($name eq $next) {
+                $found = 1;
+                $parent_sha1 = $sha1;
+                if (! @comps) {
+                    return Gitcat::Object->new(
+                        name => $name,
+                        kind => $kind,
+                        sha1 => $sha1,
+                        mode => $mode,
+                        content => $self->get_object_content($kind, $sha1),
+                    );
+                }
+                last; 
+            }
+        }
+
+        if (! $found && @comps ) {
+            confess "Could not find " . join('/', @args);
+        }
+    }
 }
     
 __PACKAGE__->meta->make_immutable();
