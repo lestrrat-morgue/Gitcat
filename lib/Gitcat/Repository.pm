@@ -57,6 +57,12 @@ has owner => (
     lazy_build => 1,
 );
 
+has refs => (
+    is => 'ro',
+    isa => 'HashRef',
+    lazy_build => 1,
+);
+
 sub _build_config {
     my $self = shift;
     local $/ = "\0";
@@ -107,14 +113,13 @@ sub _build_gitdir {
 sub _build_last_change {
     my $self = shift;
 
-    my @cmd = $self->git_cmd(
+    my $fh = $self->git_cmd(
         'for-each-ref',
         '--format=%(committer)',
         '--sort=-committerdate',
         '--count=1',
         'refs/heads'
     );
-    open my $fh, "-|", @cmd or confess "Cannot execute @cmd: $!";
 
     my $most_recent = <$fh>;
     close $fh or return;
@@ -143,9 +148,25 @@ sub _build_owner {
     return $owner;
 }
 
+sub _build_refs {
+    my ($self) = @_;
+
+    my $fh = $self->git_cmd("show-ref");
+    my %refs;
+    while (my $line = <$fh>) {
+        chomp $line;
+        my ($sha1, $ref) = split /\s+/, $line;
+        $refs{ $ref } = { sha1 => $sha1, ref => $ref };
+    }
+    return \%refs;
+}
+        
 sub git_cmd {
     my ($self, @args) = @_;
-    return ( $self->git, '--git-dir='. $self->gitdir(), @args );
+    my @cmd = ( $self->git, '--git-dir='. $self->gitdir(), @args );
+    open my $fh, "-|", @cmd or confess "Failed to execute @cmd: $!";
+    binmode($fh, ':utf8');
+    return $fh;
 }
     
 
@@ -157,10 +178,9 @@ sub commits {
     my @commits;
     my $maxcount = 10;
     my @args;
-    my @cmd = $self->git_cmd("rev-list", "--header", $sha1, @args, "--max-count=$maxcount");
-    open my $fh, "-|", @cmd or confess "Failed to execute @cmd: $!";
 
-    binmode($fh, ':utf8');
+    my $fh = $self->git_cmd("rev-list", "--header", $sha1, @args, "--max-count=$maxcount");
+
     local $/ = "\0";
     while (my $line = <$fh>) {
         chomp $line;
@@ -169,6 +189,7 @@ sub commits {
 
     return \@commits;
 }
+
 
 __PACKAGE__->meta->make_immutable();
 

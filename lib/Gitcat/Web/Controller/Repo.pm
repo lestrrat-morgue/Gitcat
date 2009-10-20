@@ -1,7 +1,6 @@
 package Gitcat::Web::Controller::Repo;
 use Moose;
 use namespace::clean -except => qw(meta);
-use Git::PurePerl;
 
 BEGIN { extends 'Catalyst::Controller' }
 
@@ -22,10 +21,12 @@ sub load
 
 sub summary
     :Chained('/repo/load')
-    :PathPart('')
-    :Args
+    :PathPart('summary')
+    :Args(0)
 {
-
+    my ($self, $c) = @_;
+    my $repo_id = $c->stash->{repo_id};
+    $c->res->redirect( "/repo/$repo_id/branch/master/summary" );
 }
 
 __PACKAGE__->meta->make_immutable();
