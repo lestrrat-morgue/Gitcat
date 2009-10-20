@@ -1,0 +1,38 @@
+[% WRAPPER wrapper.tt,
+    page.title => repo_id
+%]
+
+<table>
+<tr>
+    <th>description</th>
+    <td>[% repo.description %]</td>
+</tr>
+<tr>
+    <th>owner</th>
+    <td>[% repo.owner %]</td>
+</tr>
+<tr>
+    <th>last change</th>
+    <td>[% repo.last_change.strftime('%a, %d %b %Y %T %z') %]</td>
+</tr>
+<tr>
+    <th>URL</th>
+    <td>TODO</td>
+</tr>
+</table>
+
+<div class="header"><a class="title" name="shortlog">shortlog</a></div>
+
+<table class="shortlog" style="font-size: 10pt">
+<tbody>
+[% FOREACH commit IN repo.commits %]
+<tr class="[% IF (loop.index % 2) %]dark[% ELSE %]light[% END %]">
+    <td><i>[% commit.committed_on.strftime('%Y-%m-%d') %]</i></td>
+    <td class="author">[% commit.author.name | html %]</td>
+    <td><a class="list subject">[% commit.short_comment | html %]</a></td>
+</tr>
+[% END %]
+</tbody>
+</table>
+
+[% END %]

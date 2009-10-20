@@ -1,0 +1,16 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" media="screen" href="/static/css/gitcat.css" />
+</head>
+<body>
+<div class="page_header">
+<a>[% page.title %]</a>
+</div>
+
+[% content %]
+
+<div class="page_footer">
+Gitter
+</div>
+</body>
+</html>

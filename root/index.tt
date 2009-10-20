@@ -1,0 +1,22 @@
+[% WRAPPER wrapper.tt,
+    page.title => "Gitter",
+ %]
+
+<table>
+<tr>
+    <td>Project</td>
+    <td>Description</td>
+    <td>Owner</td>
+    <td>Last Change</td>
+</tr>
+[% FOREACH pair IN repos.pairs %]
+<tr class="[% IF (loop.index % 2) %]light[% ELSE %]dark[% END %]">
+    <td>[% pair.key %]</td>
+    <td>[% pair.value.repository.description %]</td>
+    <td>[% pair.value.repository.owner %]</td>
+    <td>[% pair.value.repository.last_change %]</td>
+    <td><a href="/repo/[% pair.key %]/summary">summary</a></td>
+</tr>
+[% END %]
+</table>
+[% END %]
