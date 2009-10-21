@@ -11,9 +11,10 @@ requires 'Catalyst::Plugin::ConfigLoader';
 requires 'Catalyst::Plugin::Static::Simple';
 requires 'Catalyst::Action::RenderView';
 requires 'parent';
-requires 'Config::General'; # This should reflect the config file format you've chosen
-                 # See Catalyst::Plugin::ConfigLoader for supported formats
-requires 'Git::PurePerl';
+requires 'Config::General'; 
+
+# As of this writing, we currently use Git::PurePerl from github.
+requires 'Git::PurePerl' => 0.42;
 catalyst;
 
 install_script glob('script/*.pl');
