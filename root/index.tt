@@ -15,7 +15,7 @@
     <td>[% pair.value.repository.description %]</td>
     <td>[% pair.value.repository.owner %]</td>
     <td>[% pair.value.repository.last_change %]</td>
-    <td><a href="/repo/[% pair.key %]/summary">summary</a></td>
+    <td><a href="/repo/[% pair.key %]">summary</a></td>
 </tr>
 [% END %]
 </table>
