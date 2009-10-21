@@ -122,6 +122,12 @@ sub get_owner {
     return $owner;
 }
 
+sub get_diff {
+    my ($self, $sha1, $parent_sha1) = @_;
+
+    my $fh = $self->execfh("diff", $parent_sha1, $sha1);
+    return do { local $/; <$fh> }
+}
 
 sub cmd {
     my ($self, @args) = @_;
