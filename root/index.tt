@@ -13,8 +13,8 @@
 <tr class="[% IF (loop.index % 2) %]light[% ELSE %]dark[% END %]">
     <td>[% pair.key %]</td>
     <td>[% pair.value.repository.description %]</td>
-    <td>[% pair.value.repository.owner %]</td>
-    <td>[% pair.value.repository.last_change %]</td>
+    <td>[% pair.value.repository.get_owner %]</td>
+    <td>[% pair.value.repository.get_last_activity %]</td>
     <td><a href="/repo/[% pair.key %]">summary</a></td>
 </tr>
 [% END %]
