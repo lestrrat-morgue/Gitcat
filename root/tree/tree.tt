@@ -11,15 +11,10 @@
 <tr class="[% IF loop.index % 2 %]dark[% ELSE %]light[% END %]">
 <td class="mode">[% entry.mode_str %]</td>
 <td class="list">
-[% # We reuse this guy
-    SET url = "/repo/" _ repo_id _ "/branch/" _ branch_id _ "/";
-    IF (tree_comp.size > 0);
-        url = url _ tree_comp.join('/') _ '/';
-    END;
-%]
-<a href="/repo/[% repo_id %]/branch/[% branch_id %]/tree/[% IF (tree_comp.size > 0) %][% tree_comp.join('/') %]/[% END %][% entry.filename %]">[% entry.filename | html %]</a></td>
+[% IF (entry.is_submodule) %][% entry.filename %][% ELSE %]<a href="/repo/[% repo_id %]/branch/[% branch_id %]/tree/[% IF (tree_comp.size > 0) %][% tree_comp.join('/') %]/[% END %][% entry.filename %]">[% entry.filename | html %]</a>[% END %]
+</td>
 <td class="link">
-<a href="/repo/[% repo_id %]/branch/[% branch_id %]/tree/[% IF (tree_comp.size > 0) %][% tree_comp.join('/') %]/[% END %][% entry.filename %]">[% entry_object.kind %]</a> | <a href="/repo/[% repo_id %]/branch/[% branch_id %]/history/[% IF (tree_comp.size > 0) %][% tree_comp.join('/') %]/[% END %][% entry.filename %]">history</a> | raw
+[% IF (entry.is_submodule) %]mod | history | raw[% ELSE %]<a href="/repo/[% repo_id %]/branch/[% branch_id %]/tree/[% IF (tree_comp.size > 0) %][% tree_comp.join('/') %]/[% END %][% entry.filename %]">[% entry_object.kind %]</a> | <a href="/repo/[% repo_id %]/branch/[% branch_id %]/history/[% IF (tree_comp.size > 0) %][% tree_comp.join('/') %]/[% END %][% entry.filename %]">history</a> | raw[% END %]
 </td>
 </tr>
 [% END %]

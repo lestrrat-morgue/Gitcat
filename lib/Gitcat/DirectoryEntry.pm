@@ -5,10 +5,21 @@ use namespace::clean -except => qw(meta);
 
 extends 'Git::PurePerl::DirectoryEntry';
 
+has is_submodule => (
+    is => 'ro',
+    isa => 'Bool',
+    lazy_build => 1,
+);
+
 use constant {
     S_IFINVALID => 0030000,
     S_IFGITLINK => 0160000,
 };
+
+sub _build_is_submodule {
+    my $self = shift;
+    return S_ISGITLINK(oct $self->mode);
+}
 
 # submodule/subproject, a commit object reference
 sub S_ISGITLINK {
