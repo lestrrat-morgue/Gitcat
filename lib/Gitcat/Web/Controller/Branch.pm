@@ -14,7 +14,7 @@ sub load
     my $repo = $c->stash->{repo};
     $c->stash(
         branch_id => $branch_id,
-        branch_head => $repo->refs->{"refs/heads/$branch_id"},
+        branch => $repo->ref("refs/heads/$branch_id"),
     );
 }
 

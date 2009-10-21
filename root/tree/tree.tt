@@ -1,0 +1,17 @@
+[% WRAPPER wrapper.tt,
+    page.title => repo_id
+%]
+
+<table class="tree">
+<tbody>
+[% FOREACH entry IN object.directory_entries %]
+<tr class="[% IF loop.index % 2 %]dark[% ELSE %]light[% END %]">
+<td class="mode">[% entry.mode_str %]</td>
+<td class="list">[% entry.filename | html %]</td>
+<td class="link">-</td>
+</tr>
+[% END %]
+</tbody>
+</table>
+
+[% END %]

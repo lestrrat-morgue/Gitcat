@@ -37,7 +37,11 @@ sub _build_repos {
             push @repos, {
                 name => $name,
                 directory => $next,
-                repository => Gitcat::Repository->new(directory => $next)
+                repository => Gitcat::Repository->new(
+                    -d $next->subdir('.git') ? 
+                        (gitdir => $next->subdir('.git')) :
+                        (gitdir => $next)
+                ),
             };
         }
     }
@@ -54,7 +58,7 @@ sub load {
     my $repo = $self->repos->{$id}->{repository};
     if (! $repo) {
         my $config = $self->repos->{$id};
-        $repo = Git::PurePerl->new(
+        $repo = Gitcat::Repository->new(
             directory => $config->{directory}
         );
 
