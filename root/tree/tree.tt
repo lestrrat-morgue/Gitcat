@@ -2,6 +2,7 @@
     page.title => repo_id
 %]
 
+[% PROCESS tree/mini_summary.tt %]
 <table class="tree">
 <tbody>
 [% FOREACH entry IN object.directory_entries %]

@@ -19,9 +19,9 @@ sub load
     );
 }
 
-sub summary
+sub view
     :Chained('/repo/load')
-    :PathPart('summary')
+    :PathPart('')
     :Args(0)
 {
     my ($self, $c) = @_;

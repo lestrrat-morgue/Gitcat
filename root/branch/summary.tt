@@ -16,6 +16,10 @@
     <td>[% repo.last_change.strftime('%a, %d %b %Y %T %z') %]</td>
 </tr>
 <tr>
+    <th>tree</th>
+    <td><a href="/repo/[% repo_id %]/branch/[% branch_id %]/tree">tree</a></td>
+</tr>
+<tr>
     <th>URL</th>
     <td>TODO</td>
 </tr>

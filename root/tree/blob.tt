@@ -2,6 +2,7 @@
     page.title => repo_id
 %]
 
+[% PROCESS tree/mini_summary.tt %]
 [% SET lines = object.content.split("\n") %]
 [% USE format %][% SET line_number_fmt = format('%' _ (lines.size.length + 1) _ 'd') %]
 [% FOREACH line IN lines %]

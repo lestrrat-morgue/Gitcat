@@ -19,14 +19,14 @@ sub load
 }
 
 sub branch_noarg
-    :Chained('/repository/load')
+    :Chained('/branch/load')
     :PathPart('')
     :Args(0)
 {
     my ($self, $c) = @_;
 
     my $repo_id = $c->stash->{repo_id};
-    $c->res->redirect("/repo/$repo_id/branch/master");
+    $c->res->redirect("/repo/$repo_id/branch/master/summary");
 }
 
 sub commits
