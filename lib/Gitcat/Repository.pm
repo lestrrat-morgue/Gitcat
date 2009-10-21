@@ -20,7 +20,7 @@ has tree_class => (
 );
 
 sub _build_git {
-    my @paths = split(/:/, $ENV{GITCAT_GIT_PATH} || "/opt/local/bin:/usr/local/");
+    my @paths = split(/:/, $ENV{GITCAT_GIT_PATH} || "/opt/local/bin:/usr/local/bin:/usr/bin:/bin");
     foreach my $path (@paths) {
         my $x = Path::Class::File->new( $path, 'git' );
         if( -x $x ) {
