@@ -1,0 +1,17 @@
+[% WRAPPER wrapper.tt,
+    page.title => repo_id 
+%]
+
+<table class="tree">
+<tbody>
+[% FOREACH h IN history %]
+<tr class="[% IF loop.index % 2 %]dark[% ELSE %]light[% END %]">
+<td><i>[% h.committed_time %]</i></td>
+<td class="author"><span title="[% h.author.name | html %]">[% h.author.name | html %]</td>
+<td><a class="list subject">[% h.comment | html %]</a></td>
+</tr>
+[% END %]
+</tbody>
+</table>
+
+[% END %]

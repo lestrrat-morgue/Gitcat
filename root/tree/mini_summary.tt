@@ -1,7 +1,5 @@
-<table>
-<tr>
-    <td><a href="/repo/[% repo_id %]">[% repo_id %]</a></td>
-    <td><a href="/repo/[% repo_id %]/branch/[% branch_id %]">[% branch_id %]</a></td>
-    <td>[% IF tree_comp.size > 0 %][% tree_comp.join('/') %][% ELSE %]/[% END %]</td>
+<div class="minisummary">
+<a href="/repo/[% repo_id %]">[% repo_id %]</a>/<a href="/repo/[% repo_id %]/branch/[% branch_id %]">[% branch_id %]</a>[% IF tree_comp.size > 0 %]/[% tree_comp.join('/') %][% ELSE %]/[% END %]</td>
+    <td>[% object.sha1 %]</td>
 </tr>
 </table>

@@ -5,8 +5,6 @@ use namespace::clean -except => qw(meta);
 
 extends 'Git::PurePerl::DirectoryEntry';
 
-__PACKAGE__->meta->make_immutable();
-
 use constant {
     S_IFINVALID => 0030000,
     S_IFGITLINK => 0160000,
@@ -95,5 +93,6 @@ sub file_type_long {
     }
 }
 
+__PACKAGE__->meta->make_immutable();
 
 1;
