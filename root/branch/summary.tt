@@ -9,11 +9,11 @@
 </tr>
 <tr>
     <th>owner</th>
-    <td>[% repo.owner %]</td>
+    <td>[% repo.get_owner %]</td>
 </tr>
 <tr>
     <th>last change</th>
-    <td>[% repo.last_change.strftime('%a, %d %b %Y %T %z') %]</td>
+    <td>[% repo.get_last_activity().strftime('%a, %d %b %Y %T %z') %]</td>
 </tr>
 <tr>
     <th>tree</th>
@@ -29,11 +29,11 @@
 
 <table class="shortlog" style="font-size: 10pt">
 <tbody>
-[% FOREACH commit IN repo.get_commits %]
+[% FOREACH commit IN repo.get_history(branch_id, '--max-count=10') %]
 <tr class="[% IF (loop.index % 2) %]dark[% ELSE %]light[% END %]">
-    <td><i>[% commit.committed_on.strftime('%Y-%m-%d') %]</i></td>
+    <td><i>[% commit.committed_time.strftime('%Y-%m-%d') %]</i></td>
     <td class="author">[% commit.author.name | html %]</td>
-    <td><a class="list subject">[% commit.short_comment | html %]</a></td>
+    <td><a class="list subject">[% commit.comment | html %]</a></td>
 </tr>
 [% END %]
 </tbody>

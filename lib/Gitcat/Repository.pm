@@ -1,6 +1,7 @@
 package Gitcat::Repository;
 use Moose;
 use MooseX::Types::Path::Class;
+use DateTime;
 use Gitcat::Tree;
 use namespace::clean -except => qw(meta);
 
@@ -75,9 +76,9 @@ sub get_object_from_path {
 }
 
 sub get_history {
-    my ($self, $ref, $path) = @_;
+    my ($self, $ref, @options) = @_;
 
-    my $fh = $self->execfh("rev-list", "-z", "--header", $ref, '--', $path);
+    my $fh = $self->execfh("rev-list", "-z", "--header", $ref, @options);
 
     my @history;
 
@@ -88,6 +89,39 @@ sub get_history {
     }
     return @history;
 }
+
+sub get_last_activity {
+    my $self = shift;
+
+    my $fh = $self->execfh("for-each-ref", 
+         '--format=%(committer)',
+         '--sort=-committerdate',
+         '--count=1',
+         'refs/heads'
+    );
+
+    my $most_recent = <$fh>;
+    close($fh);
+
+    if ($most_recent && $most_recent =~ / (\d+) ([-+][01]\d\d\d)$/) {
+        return DateTime->from_epoch(epoch => $1, time_zone => $2);
+    }
+    return;
+}
+
+sub get_owner {
+    my $self = shift;
+
+    my $stat = $self->gitdir->stat;
+    my ($name, $passwd, $uid, $gid, $quota, $comment, $gcos, $dir, $shell) = getpwuid($stat->uid);
+    if (!defined $gcos) {
+        return;
+    }
+    my $owner = $gcos;
+    $owner =~ s/[,;].*$//;
+    return $owner;
+}
+
 
 sub cmd {
     my ($self, @args) = @_;
