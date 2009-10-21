@@ -3,6 +3,7 @@
 %]
 
 [% PROCESS tree/mini_summary.tt %]
+<div class="page_body">
 <table class="tree">
 <tbody>
 [% FOREACH entry IN object.directory_entries %]
@@ -24,5 +25,5 @@
 [% END %]
 </tbody>
 </table>
-
+</div>
 [% END %]

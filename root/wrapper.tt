@@ -7,9 +7,7 @@
 <a>[% page.title %]</a>
 </div>
 
-<div class="page_body">
 [% content %]
-</div>
 
 <div class="page_footer">
 Gitcat

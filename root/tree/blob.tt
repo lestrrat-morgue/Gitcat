@@ -3,10 +3,13 @@
 %]
 
 [% PROCESS tree/mini_summary.tt %]
+
+<div class="page_body">
 [% SET lines = object.content.split("\n") %]
 [% USE format %][% SET line_number_fmt = format('%' _ (lines.size.length + 1) _ 'd') %]
 [% FOREACH line IN lines %]
 <div class="pre"><a id="|[% loop.count %]" href="#|[% loop.count %]" class="linenr">[% line_number_fmt(loop.count) %]</a> [% line | html %]</div>
 [% END %]
+</div>
 
 [% END %]

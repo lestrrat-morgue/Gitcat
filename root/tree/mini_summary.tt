@@ -1,3 +1,3 @@
-<div class="minisummary">
+<div class="page_path">
 <a href="/repo/[% repo_id %]">[% repo_id %]</a>/<a href="/repo/[% repo_id %]/branch/[% branch_id %]">[% branch_id %]</a>[% SET sofar = [] %][% FOREACH comp IN tree_comp %]/<a href="/repo/[% repo_id %]/branch/[% branch_id %]/tree/[% IF (sofar.size > 0) %][% sofar.join('/') %]/[% END %][% comp %]">[% comp %]</a>[% sofar.push(comp) %][% END %] [[% object.sha1 %]]
 </div>
