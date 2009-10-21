@@ -1,0 +1,44 @@
+[% WRAPPER wrapper.tt,
+    page.title => repo_id
+%]
+
+<div class="title_text">
+<table class="object_header">
+<tbody>
+<tr>
+    <td>author</td>
+    <td>[% object.author.name | html %][% IF (object.author.email) %] &lt;[% object.author.email | html %]&gt;[% END %]</td>
+</tr>
+<tr>
+    <td>&nbsp;</td>
+    <td>[% object.authored_time.strftime('%a, %d %b %Y %T %z') %]</td>
+</tr>
+<tr>
+    <td>committer</td>
+    <td>[% object.committer.name | html %][% IF (object.committer.email) %] &lt;[% object.committer.email | html %]&gt;[% END %]</td>
+</tr>
+<tr>
+    <td>&nbsp;</td>
+    <td>[% object.committed_time.strftime('%a, %d %b %Y %T %z') %]</td>
+</tr>
+<tr>
+    <td>commit</td>
+    <td class="sha1">[% object.sha1 %]</td>
+</tr>
+<tr>
+    <td>tree</td>
+    <td class="sha1">[% object.tree_sha1 %]</td>
+</tr>
+<tr>
+    <td>parent</td>
+    <td class="sha1">[% object.parent_sha1 %]</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="page_body">
+<div class="pre">[% object.comment %]</div>
+</div>
+
+[% END %]

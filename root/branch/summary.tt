@@ -33,7 +33,7 @@
 <tr class="[% IF (loop.index % 2) %]dark[% ELSE %]light[% END %]">
     <td><i>[% commit.committed_time.strftime('%Y-%m-%d') %]</i></td>
     <td class="author">[% commit.author.name | html %]</td>
-    <td><a class="list subject">[% commit.comment | html %]</a></td>
+    <td><a class="list subject" href="/repo/[% repo_id %]/commit/[% commit.sha1 %]">[% commit.comment | html %]</a></td>
 </tr>
 [% END %]
 </tbody>
