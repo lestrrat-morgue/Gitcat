@@ -129,6 +129,13 @@ sub get_diff {
     return do { local $/; <$fh> }
 }
 
+sub get_diff_summary {
+    my ($self, $sha1, $parent_sha1) = @_;
+
+    my $fh = $self->execfh("diff", "--stat", "--summary", $parent_sha1, $sha1);
+    return do { local $/; <$fh> }
+}
+
 sub cmd {
     my ($self, @args) = @_;
     return ( $self->git, '--git-dir='. $self->gitdir(), @args );

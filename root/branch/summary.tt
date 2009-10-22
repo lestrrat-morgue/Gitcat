@@ -34,6 +34,9 @@
     <td><i>[% commit.committed_time.strftime('%Y-%m-%d') %]</i></td>
     <td class="author">[% commit.author.name | html %]</td>
     <td><a class="list subject" href="/repo/[% repo_id %]/commit/[% commit.sha1 %]">[% commit.comment | html %]</a></td>
+    <td class="link">
+        <a href="/repo/[% repo_id %]/commit/[% commit.sha1 %]">commit</a> | <a href="/repo/[% repo_id %]/commitdiff/[% commit.sha1 %]">commitdiff</a> | tree | snapshot 
+    </td>
 </tr>
 [% END %]
 </tbody>

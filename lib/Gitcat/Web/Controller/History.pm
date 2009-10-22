@@ -39,6 +39,18 @@ sub commit
     );
 }
 
+sub commitdiff
+    :Chained('/repo/load')
+    :PathPat('commitdiff')
+    :Args(1)
+{
+    my ($self, $c, $sha1) = @_;
+    my $repo   = $c->stash->{repo};
+    $c->stash(
+        object => $repo->get_object($sha1)
+    );
+}
+
 __PACKAGE__->meta->make_immutable();
 
 1;

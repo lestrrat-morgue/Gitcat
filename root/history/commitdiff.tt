@@ -41,6 +41,11 @@
 <div class="log">
     <div class="pre">[% object.comment %]</div>
 </div>
+<div class="patchset">
+<div class="pre">[% repo.get_diff_summary( object.parent_sha1, object.sha1 ) %]</div>
+<div class="pre">[% repo.get_diff(object.sha1, object.parent_sha1) %]</div>
+</div>
 </div>
 
 [% END %]
+
